@@ -16,6 +16,7 @@ Create a python env, activate the environement, install openai dependency
   pip install flask
   pip install IPython
   pip install python-dotenv
+  pip install flask-cors
 ```
 
 ### Execution ###

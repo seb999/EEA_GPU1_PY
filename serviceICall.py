@@ -1,12 +1,15 @@
 from flask import Flask, request, Response
+from flask_cors import CORS
 import openai
 import os
+import json
 from dotenv import load_dotenv
 
 # Load variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app) 
 
 API_KEY_GPU1 = os.getenv("API_KEY")
 
@@ -15,17 +18,18 @@ client = openai.OpenAI(
     base_url="https://llmgw.eea.europa.eu/v1"  
 )
 
-def generate_stream(prompt: str, model: str = "Inhouse-LLM/Mistral-Small-3.1-24B-Instruct-2503"):
+def generate_stream(messages: list, model: str = "Inhouse-LLM/Mistral-Small-3.1-24B-Instruct-2503"):
     response = client.chat.completions.create(
         model=model,
-        messages=[{"role": "user", "content": prompt}],
+        messages=messages,
         stream=True
     )
 
     for chunk in response:
         content = chunk.choices[0].delta.content
         if content:
-            yield f"data: {content}\n\n" 
+            data = {"role": "assistant", "content": content}
+            yield f"data: {json.dumps(data)}\n\n"
 
 @app.route("/chat", methods=["POST"])
 def chat():
