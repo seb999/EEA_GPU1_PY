@@ -7,11 +7,16 @@ Description of the model:
 
 
 ### Installation ###
-Create a python env, activate the environement, install openai dependency
+Create a python environement, activate the environement :
 
 ```bash
   python -m venv venv
   venv\Scripts\activate 
+```
+
+ Install dependencies :
+
+```bash
   pip install openai
   pip install flask
   pip install IPython
